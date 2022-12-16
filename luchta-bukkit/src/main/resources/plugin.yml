@@ -1,0 +1,13 @@
+api-version: 1.19
+author: Dev7ex
+database: false
+depend: [LuckPerms]
+description: ${project.description}
+load: POSTWORLD
+loadbefore: []
+main: com.dev7ex.luchta.LuchtaPlugin
+name: ${project.name}
+prefix: ${project.name}
+softdepend: []
+version: ${project.version}
+website: ${project.url}
