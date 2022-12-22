@@ -2,6 +2,7 @@ package com.dev7ex.luchta.listener;
 
 import com.dev7ex.luchta.LuchtaPlugin;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,12 +22,18 @@ public class PlayerConnectionListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void handlePlayerJoin(final PlayerJoinEvent event) {
-        if (!this.plugin.getConfiguration().isTablistEnabled()) {
-            return;
+        final Player player = event.getPlayer();
+
+        if (this.plugin.getConfiguration().isTablistEnabled()) {
+            this.plugin.getScoreboardService().updateNameTagsDelayed(player,
+                    this.plugin.getLuckPermsHelper().getGroup(player.getUniqueId()),
+                    3L);
         }
-        this.plugin.getScoreboardService().updateNameTagsDelayed(event.getPlayer(),
-                this.plugin.getLuckPermsHelper().getGroup(event.getPlayer().getUniqueId()),
-                3L);
+
+        if ((this.plugin.isUpdateAvailable()) && (this.plugin.getConfiguration().isUpdateMessageEnabled()) && (player.hasPermission("luchta.update.notify"))) {
+            player.sendMessage("§8[§aLuchta§8] §7There is a new update available. https://www.spigotmc.org/resources/luchta.106763/");
+        }
+
     }
 
 }

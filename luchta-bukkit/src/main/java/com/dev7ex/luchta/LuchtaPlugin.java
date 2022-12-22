@@ -32,6 +32,8 @@ public class LuchtaPlugin extends JavaPlugin {
     private static final int SERVICE_ID = 17151;
     private static final int RESOURCE_ID = 106763;
 
+    private boolean updateAvailable = false;
+
     private LuchtaConfiguration configuration;
 
     private LuckPerms luckPerms;
@@ -62,6 +64,7 @@ public class LuchtaPlugin extends JavaPlugin {
         this.scoreboardService.onEnable();
 
         final Metrics metrics = new Metrics(this, LuchtaPlugin.SERVICE_ID);
+        this.checkUpdates();
 
         this.registerListeners();
     }
@@ -83,6 +86,28 @@ public class LuchtaPlugin extends JavaPlugin {
 
         final UserGroupUpdateListener updateListener = new UserGroupUpdateListener(this);
         updateListener.register();
+    }
+
+    public void checkUpdates() {
+        super.getServer().getScheduler().runTaskAsynchronously(this, () -> {
+            try (final InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + LuchtaPlugin.RESOURCE_ID).openStream()) {
+                try (final Scanner scanner = new Scanner(inputStream)) {
+                    if (scanner.hasNext()) {
+                        if (!this.getDescription().getVersion().equalsIgnoreCase(scanner.next())) {
+                            this.updateAvailable = true;
+                            super.getServer().getScheduler().runTask(this, () -> {
+                                super.getLogger().info("There is a new update available.");
+                            });
+
+                        }
+                    }
+                }
+            } catch (final IOException exception) {
+                super.getServer().getScheduler().runTask(this, () -> {
+                    super.getLogger().info("Unable to check for updates: " + exception.getMessage());
+                });
+            }
+        });
     }
 
     public static LuchtaPlugin getInstance() {

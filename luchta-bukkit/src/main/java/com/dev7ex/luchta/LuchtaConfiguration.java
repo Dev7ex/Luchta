@@ -17,6 +17,7 @@ public class LuchtaConfiguration {
     private String chatFormat;
     private boolean chatEnabled;
     private boolean tablistEnabled;
+    private boolean updateMessageEnabled;
 
     public LuchtaConfiguration(final Plugin plugin) {
         this.fileConfiguration = plugin.getConfig();
@@ -27,6 +28,7 @@ public class LuchtaConfiguration {
         this.chatFormat = this.fileConfiguration.getString("settings.chat-format");
         this.chatEnabled = this.fileConfiguration.getBoolean("settings.chat-enabled"  );
         this.tablistEnabled = this.fileConfiguration.getBoolean("settings.tablist-enabled");
+        this.updateMessageEnabled = this.fileConfiguration.getBoolean("settings.update-message");
     }
 
 }
