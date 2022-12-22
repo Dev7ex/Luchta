@@ -13,8 +13,14 @@ import lombok.Getter;
 
 import net.luckperms.api.LuckPerms;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
 
 /**
  * @author Dev7ex
@@ -22,6 +28,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 @Getter(AccessLevel.PUBLIC)
 public class LuchtaPlugin extends JavaPlugin {
+
+    private static final int SERVICE_ID = 17151;
+    private static final int RESOURCE_ID = 106763;
 
     private LuchtaConfiguration configuration;
 
@@ -51,6 +60,8 @@ public class LuchtaPlugin extends JavaPlugin {
 
         this.scoreboardService = new ScoreboardService(this);
         this.scoreboardService.onEnable();
+
+        final Metrics metrics = new Metrics(this, LuchtaPlugin.SERVICE_ID);
 
         this.registerListeners();
     }
